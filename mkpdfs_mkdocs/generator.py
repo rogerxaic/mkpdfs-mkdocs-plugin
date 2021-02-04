@@ -197,17 +197,14 @@ class Generator(object):
                 self._toc.append(child)
 
     def _gen_children(self, url, children, level = 2):
-        self.logger.log(msg='[_gen_children] Entered with level: ' + str(level), level=logging.INFO)
         ul = self.html.new_tag('ul')
         if self.config['toc_level'] < level :
             for child in children:
                 a = self.html.new_tag('a', href=child.url)
                 a.insert(0, child.title)
-                self.logger.log(msg='[_gen_children] Adding child: ' + child.title, level=logging.INFO)
                 li = self.html.new_tag('li')
                 li.append(a)
                 if child.children :
-                    self.logger.log(msg='[_gen_children] Proceeding to children.', level=logging.INFO)
                     sub = self._gen_children(url, child.children, level + 1)
                     li.append(sub)
                 ul.append(li)
@@ -219,7 +216,6 @@ class Generator(object):
         urlid = url.split('.')[0]
         a = self.html.new_tag('a', href='#mkpdf-{}'.format(urlid))
         a.insert(0, p.title)
-        self.logger.log(msg='[_gen_toc_for_section] Title: ' + p.title, level=logging.INFO)
         h4.append(a)
         menu.append(h4)
         if self.config['toc_level'] > 1:
@@ -227,7 +223,6 @@ class Generator(object):
             for child in p.toc.items:
                 a = self.html.new_tag('a', href=child.url)
                 a.insert(0, child.title)
-                self.logger.log(msg='[_gen_toc_for_section] Parsing child ' + child.title, level=logging.INFO)
                 li = self.html.new_tag('li')
                 li.append(a)
                 if child.title == p.title:
@@ -249,7 +244,6 @@ class Generator(object):
             li = self.html.new_tag('li')
             a = self.html.new_tag('a', href=item.url)
             a.append(item.title)
-            self.logger.log(msg='[_gen_toc_page] ' + item.title, level=logging.INFO)
             li.append(a)
             menu.append(li)
             if item.children :
