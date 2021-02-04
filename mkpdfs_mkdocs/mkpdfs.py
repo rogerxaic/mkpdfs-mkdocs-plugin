@@ -22,6 +22,7 @@ class Mkpdfs(BasePlugin):
         ('author', config_options.Type(str, default=None)),
         ('toc_position', config_options.Type(str, default="pre")),
         ('output_path', config_options.Type(str, default="pdf/combined.pdf")),
+        ('toc_level', config_options.Type(int, default=1)),
     )
 
     def __init__(self):
