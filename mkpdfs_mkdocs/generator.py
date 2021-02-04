@@ -150,7 +150,7 @@ class Generator(object):
             h3 = self.html.new_tag('h3')
             h3.insert(0, n.title)
             self._toc.append(h3)
-            if self.config['toc_level'] > 1:
+            if self.config['toc_level'] > 0:
                 if n.is_page :
                     ptoc = self._gen_toc_page(n.file.url, n.toc)
                     self._toc.append(ptoc)
@@ -196,7 +196,7 @@ class Generator(object):
                 child.append(stoc)
                 self._toc.append(child)
 
-    def _gen_children(self, url, children, level = 3):
+    def _gen_children(self, url, children, level = 2):
         self.logger.log(msg='[_gen_children] Entered with level: ' + str(level), level=logging.INFO)
         ul = self.html.new_tag('ul')
         if self.config['toc_level'] < level :
