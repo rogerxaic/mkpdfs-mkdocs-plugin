@@ -196,7 +196,7 @@ class Generator(object):
                 self._toc.append(child)
 
     def _gen_children(self, url, children, level = 1):
-        self.logger.log(msg='[_gen_children] Entered with level: ' + level, level=logging.INFO)
+        self.logger.log(msg='[_gen_children] Entered with level: ' + str(level), level=logging.INFO)
         ul = self.html.new_tag('ul')
         for child in children:
             a = self.html.new_tag('a', href=child.url)
