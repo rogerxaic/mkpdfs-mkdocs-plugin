@@ -195,15 +195,15 @@ class Generator(object):
                 child.append(stoc)
                 self._toc.append(child)
 
-    def _gen_children(self, url, children):
+    def _gen_children(self, url, children, level = 1):
         ul = self.html.new_tag('ul')
         for child in children:
             a = self.html.new_tag('a', href=child.url)
             a.insert(0, child.title)
             li = self.html.new_tag('li')
             li.append(a)
-            if child.children :
-                sub = self._gen_children(url, child.children)
+            if child.children and self.config['toc_level'] < level :
+                sub = self._gen_children(url, child.children, level + 1)
                 li.append(sub)
             ul.append(li)
         return ul
