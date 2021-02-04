@@ -198,17 +198,18 @@ class Generator(object):
     def _gen_children(self, url, children, level = 1):
         self.logger.log(msg='[_gen_children] Entered with level: ' + str(level), level=logging.INFO)
         ul = self.html.new_tag('ul')
-        for child in children:
-            a = self.html.new_tag('a', href=child.url)
-            a.insert(0, child.title)
-            self.logger.log(msg='[_gen_children] Adding child: ' + child.title, level=logging.INFO)
-            li = self.html.new_tag('li')
-            li.append(a)
-            if child.children and self.config['toc_level'] < level :
-                self.logger.log(msg='[_gen_children] Proceeding to children.', level=logging.INFO)
-                sub = self._gen_children(url, child.children, level + 1)
-                li.append(sub)
-            ul.append(li)
+        if self.config['toc_level'] < level :
+            for child in children:
+                a = self.html.new_tag('a', href=child.url)
+                a.insert(0, child.title)
+                self.logger.log(msg='[_gen_children] Adding child: ' + child.title, level=logging.INFO)
+                li = self.html.new_tag('li')
+                li.append(a)
+                if child.children :
+                    self.logger.log(msg='[_gen_children] Proceeding to children.', level=logging.INFO)
+                    sub = self._gen_children(url, child.children, level + 1)
+                    li.append(sub)
+                ul.append(li)
         return ul
     def _gen_toc_for_section(self, url, p):
         div = self.html.new_tag('div')
@@ -217,12 +218,14 @@ class Generator(object):
         urlid = url.split('.')[0]
         a = self.html.new_tag('a', href='#mkpdf-{}'.format(urlid))
         a.insert(0, p.title)
+        self.logger.log(msg='[_gen_toc_for_section] Title: ' + p.title, level=logging.INFO)
         h4.append(a)
         menu.append(h4)
         ul = self.html.new_tag('ul')
         for child in p.toc.items:
             a = self.html.new_tag('a', href=child.url)
             a.insert(0, child.title)
+            self.logger.log(msg='[_gen_toc_for_section] Parsing child ' + child.title, level=logging.INFO)
             li = self.html.new_tag('li')
             li.append(a)
             if child.title == p.title:
