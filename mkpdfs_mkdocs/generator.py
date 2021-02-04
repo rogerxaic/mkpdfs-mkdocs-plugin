@@ -150,11 +150,12 @@ class Generator(object):
             h3 = self.html.new_tag('h3')
             h3.insert(0, n.title)
             self._toc.append(h3)
-            if n.is_page :
-                ptoc = self._gen_toc_page(n.file.url, n.toc)
-                self._toc.append(ptoc)
-            else :
-                self._gen_toc_section(n)
+            if self.config['toc_level'] > 1:
+                if n.is_page :
+                    ptoc = self._gen_toc_page(n.file.url, n.toc)
+                    self._toc.append(ptoc)
+                else :
+                    self._gen_toc_section(n)
         self.html.body.append(self._toc)
 
     def add_cover(self):
@@ -195,7 +196,7 @@ class Generator(object):
                 child.append(stoc)
                 self._toc.append(child)
 
-    def _gen_children(self, url, children, level = 1):
+    def _gen_children(self, url, children, level = 3):
         self.logger.log(msg='[_gen_children] Entered with level: ' + str(level), level=logging.INFO)
         ul = self.html.new_tag('ul')
         if self.config['toc_level'] < level :
@@ -221,21 +222,22 @@ class Generator(object):
         self.logger.log(msg='[_gen_toc_for_section] Title: ' + p.title, level=logging.INFO)
         h4.append(a)
         menu.append(h4)
-        ul = self.html.new_tag('ul')
-        for child in p.toc.items:
-            a = self.html.new_tag('a', href=child.url)
-            a.insert(0, child.title)
-            self.logger.log(msg='[_gen_toc_for_section] Parsing child ' + child.title, level=logging.INFO)
-            li = self.html.new_tag('li')
-            li.append(a)
-            if child.title == p.title:
-                li = self.html.new_tag('div');
-            if child.children :
-                sub = self._gen_children(url, child.children)
-                li.append(sub)
-            ul.append(li)
-        if len(p.toc.items)>0:
-            menu.append(ul)
+        if self.config['toc_level'] > 1:
+            ul = self.html.new_tag('ul')
+            for child in p.toc.items:
+                a = self.html.new_tag('a', href=child.url)
+                a.insert(0, child.title)
+                self.logger.log(msg='[_gen_toc_for_section] Parsing child ' + child.title, level=logging.INFO)
+                li = self.html.new_tag('li')
+                li.append(a)
+                if child.title == p.title:
+                    li = self.html.new_tag('div');
+                if child.children :
+                    sub = self._gen_children(url, child.children)
+                    li.append(sub)
+                ul.append(li)
+            if len(p.toc.items)>0:
+                menu.append(ul)
         div.append(menu)
         div = prep_combined(div, self._base_urls[url], url)
         return div.find('div')
