@@ -196,13 +196,16 @@ class Generator(object):
                 self._toc.append(child)
 
     def _gen_children(self, url, children, level = 1):
+        self.logger.log(msg='[_gen_children] Entered with level: ' + level, level=logging.INFO)
         ul = self.html.new_tag('ul')
         for child in children:
             a = self.html.new_tag('a', href=child.url)
             a.insert(0, child.title)
+            self.logger.log(msg='[_gen_children] Adding child: ' + child.title, level=logging.INFO)
             li = self.html.new_tag('li')
             li.append(a)
             if child.children and self.config['toc_level'] < level :
+                self.logger.log(msg='[_gen_children] Proceeding to children.', level=logging.INFO)
                 sub = self._gen_children(url, child.children, level + 1)
                 li.append(sub)
             ul.append(li)
@@ -241,6 +244,7 @@ class Generator(object):
             li = self.html.new_tag('li')
             a = self.html.new_tag('a', href=item.url)
             a.append(item.title)
+            self.logger.log(msg='[_gen_toc_page] ' + item.title, level=logging.INFO)
             li.append(a)
             menu.append(li)
             if item.children :
