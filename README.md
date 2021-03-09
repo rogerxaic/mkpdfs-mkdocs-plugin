@@ -83,6 +83,7 @@ This plugin supports following options to allow you better handle the customisat
 | `toc_position` | The position of the table of contents. This option supports 3 differents values: `pre` to put the toc at the beginning of the file but after the cover (**the default value**), `post` to put it at the end of the file or `none` to not generate it at all. |
 | `toc_level` | Choose what type of detail you want in your *Table of Contents*. 0 will only list the chapters, 1 will list chapters and sections, 2 will list chapters, sections and sections-in-sections, and so on and so forth. |
 | `output_path` | The file name of the generated PDF, relative to the `site_dir`. By default this location is set to `pdf/combined.pdf`|
+| `pdf_links` | Create link to download the generated PDF to the top of each HTML page. By default this is enabled |
 | `design` |  Relative to your `MkDocs repository`, this option is the location of the CSS file defining the layout of the generated PDF. If this option is not defined the default design will be used. Defining an non existing file will cause the build or serve failure. |
 
 ## Contributing
